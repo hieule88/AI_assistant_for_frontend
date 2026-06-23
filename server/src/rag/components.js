@@ -1,21 +1,3 @@
-/**
- * KHO COMPONENT UI cho Code RAG — "DESIGN SYSTEM của DBEE".
- *
- * MỤC TIÊU: mọi trang sinh ra đều mang CÙNG MỘT NHẬN DIỆN (vibe) của công ty DBEE.
- * Vì vậy TẤT CẢ component ở đây dùng chung:
- *   - Bảng màu: vàng thương hiệu #f2db45 (+#d4bf3a hover), chữ #1f2937, nền trắng + #fffdf3.
- *   - Font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif.
- *   - Bo góc ~12px, nút "viên thuốc" vàng chữ đậm, section thoáng.
- *   - QUY ƯỚC CLASS THỐNG NHẤT có tiền tố `dbee-` (dbee-btn, dbee-section, dbee-h2, dbee-card…)
- *     → khi nhiều component cùng xuất hiện trên 1 trang, chúng ăn khớp; khi 2 trang khác nhau
- *       cùng tái sử dụng → trùng class cao → nhìn như cùng một website.
- *
- * Các component để GENERIC (không gắn brand) nên LUÔN được truy xuất cho mọi prompt
- * → đảm bảo "lúc nào cũng cùng vibe DBEE". (Chọn brand DBEE ở UI sẽ bổ sung logo + nhấn màu.)
- *
- * Mỗi entry: { id, name, description (giàu từ khóa Việt+Anh — dùng để embed), tags, code }
- */
-
 export const components = [
   {
     id: 'dbee-navbar',
@@ -395,7 +377,6 @@ export const components = [
   },
 ];
 
-/** Văn bản dùng để embed 1 component (gộp tên + mô tả + tags để truy xuất tốt hơn). */
 export function buildEmbedText(c) {
   return `${c.name}. ${c.description}. tags: ${(c.tags || []).join(', ')}`;
 }

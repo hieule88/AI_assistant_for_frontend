@@ -1,10 +1,3 @@
-/**
- * TEST RAG — kiểm tra truy xuất top-k hoạt động đúng (KHÔNG gọi model, KHÔNG tốn tiền).
- * Chạy:  cd server && npm run test:rag            (dùng bộ truy vấn mẫu)
- *        cd server && node scripts/test-rag.js "landing page quán cà phê"   (truy vấn tự nhập)
- *
- * Cần chạy `npm run build:rag` trước để có kho.
- */
 import 'dotenv/config';
 import { retrieveComponents } from '../src/rag/retrieve.js';
 import { storeKind } from '../src/rag/store.js';
