@@ -14,15 +14,15 @@ Ràng buộc kỹ thuật:
 `.trim();
 
 function stripStyle(code) {
-  return String(code)
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+    return String(code)
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
 }
 
 export function buildGenerateMessages({ description, language = 'vi', retrievedComponents = [], brand = null }) {
-  const ragBlock = retrievedComponents.length
-    ? `\n=== DESIGN SYSTEM DBEE (BẮT BUỘC TUÂN THỦ ĐỂ ĐỒNG NHẤT GIAO DIỆN) ===
+    const ragBlock = retrievedComponents.length
+        ? `\n=== DESIGN SYSTEM DBEE (BẮT BUỘC TUÂN THỦ ĐỂ ĐỒNG NHẤT GIAO DIỆN) ===
 - Dựng trang bằng cách RÁP các MẪU HTML dưới đây, DÙNG ĐÚNG các class "dbee-*".
 - Hệ thống ĐÃ gắn sẵn CSS chuẩn cho mọi class dbee-* (màu vàng #f2db45, cỡ chữ, bo góc, navbar, footer...).
   => BẠN KHÔNG ĐƯỢC viết lại / đổi CSS cho bất kỳ class dbee-* nào. Chỉ thêm CSS cho bố cục đặc thù nếu thật cần.
@@ -30,84 +30,84 @@ export function buildGenerateMessages({ description, language = 'vi', retrievedC
 
 Các MẪU HTML (chỉ cấu trúc, KHÔNG kèm style):
 ${retrievedComponents.map((c) => `# ${c.name}\n${stripStyle(c.code)}`).join('\n\n')}\n`
-    : '';
+        : '';
 
-  return [
-    {
-      role: 'system',
-      content:
-        `Bạn là Code Agent của một trợ lý làm web frontend. Ngôn ngữ trao đổi: ${language}.\n` +
-        OUTPUT_RULES,
-    },
-    { role: 'user', content: `Yêu cầu của người dùng:\n${description}\n${buildBrandBlock(brand)}${ragBlock}` },
-  ];
+    return [
+        {
+            role: 'system',
+            content:
+                `Bạn là Code Agent của một trợ lý làm web frontend. Ngôn ngữ trao đổi: ${language}.\n` +
+                OUTPUT_RULES,
+        },
+        { role: 'user', content: `Yêu cầu của người dùng:\n${description}\n${buildBrandBlock(brand)}${ragBlock}` },
+    ];
 }
 
 export const BRAND_LOGO_PLACEHOLDER = '__BRAND_LOGO__';
 
 function buildBrandBlock(brand) {
-  if (!brand) return '';
-  const c = brand.colors || {};
-  const lines = [
-    `\nÁP DỤNG NHẬN DIỆN THƯƠNG HIỆU "${brand.name}" xuyên suốt trang:`,
-    `- Màu chủ đạo: ${c.primary} (dùng cho nút, link, điểm nhấn).`,
-  ];
-  if (c.bg) lines.push(`- Màu nền: ${c.bg}.`);
-  if (c.text) lines.push(`- Màu chữ: ${c.text}.`);
-  if (brand.font) lines.push(`- Font chữ: ${brand.font} (đặt cho body).`);
-  if (brand.logo) {
-    const isImg = /^(data:|https?:)/i.test(brand.logo);
-    lines.push(
-      isImg
-        ? `- Logo: chèn ảnh ở header bằng <img src="${BRAND_LOGO_PLACEHOLDER}" alt="${brand.name}" style="height:40px">. ` +
-          `BẮT BUỘC giữ NGUYÊN VĂN chuỗi src="${BRAND_LOGO_PLACEHOLDER}" — KHÔNG thay bằng URL/base64/đường dẫn nào khác.`
-        : `- Logo: hiển thị "${brand.logo} ${brand.name}" ở header.`
-    );
-  }
-  return lines.join('\n') + '\n';
+    if (!brand) return '';
+    const c = brand.colors || {};
+    const lines = [
+        `\nÁP DỤNG NHẬN DIỆN THƯƠNG HIỆU "${brand.name}" xuyên suốt trang:`,
+        `- Màu chủ đạo: ${c.primary} (dùng cho nút, link, điểm nhấn).`,
+    ];
+    if (c.bg) lines.push(`- Màu nền: ${c.bg}.`);
+    if (c.text) lines.push(`- Màu chữ: ${c.text}.`);
+    if (brand.font) lines.push(`- Font chữ: ${brand.font} (đặt cho body).`);
+    if (brand.logo) {
+        const isImg = /^(data:|https?:)/i.test(brand.logo);
+        lines.push(
+            isImg
+                ? `- Logo: chèn ảnh ở header bằng <img src="${BRAND_LOGO_PLACEHOLDER}" alt="${brand.name}" style="height:40px">. ` +
+                `BẮT BUỘC giữ NGUYÊN VĂN chuỗi src="${BRAND_LOGO_PLACEHOLDER}" — KHÔNG thay bằng URL/base64/đường dẫn nào khác.`
+                : `- Logo: hiển thị "${brand.logo} ${brand.name}" ở header.`
+        );
+    }
+    return lines.join('\n') + '\n';
 }
 
 export function buildEditMessages({ files, instruction, language = 'vi' }) {
-  return [
-    {
-      role: 'system',
-      content:
-        `Bạn là Code Agent. Người dùng muốn CHỈNH SỬA dự án hiện có. Ngôn ngữ: ${language}.\n` +
-        `Trả về TOÀN BỘ danh sách file sau khi sửa (không chỉ phần thay đổi).\n` +
-        OUTPUT_RULES,
-    },
-    {
-      role: 'user',
-      content: `Dự án hiện tại:\n${JSON.stringify(files)}\n\nYêu cầu chỉnh sửa:\n${instruction}`,
-    },
-  ];
+    return [
+        {
+            role: 'system',
+            content:
+                `Bạn là Code Agent. Người dùng muốn CHỈNH SỬA dự án hiện có. Ngôn ngữ: ${language}.\n` +
+                `Trả về TOÀN BỘ danh sách file sau khi sửa (không chỉ phần thay đổi).\n` +
+                OUTPUT_RULES,
+        },
+        {
+            role: 'user',
+            content: `Dự án hiện tại:\n${JSON.stringify(files)}\n\nYêu cầu chỉnh sửa:\n${instruction}`,
+        },
+    ];
 }
 
 export function buildFixMessages({ files, issues, language = 'vi' }) {
-  const issueText = issues.map((i, idx) => `${idx + 1}. [${i.level}] ${i.message} (${i.file})`).join('\n');
-  return [
-    {
-      role: 'system',
-      content:
-        `Bạn là Review Agent. Trang web hiện tại có lỗi cần SỬA. Ngôn ngữ: ${language}.\n` +
-        `Sửa ĐÚNG các lỗi được liệt kê, GIỮ NGUYÊN nội dung/thiết kế hợp lệ còn lại.\n` +
-        `Trả về TOÀN BỘ danh sách file sau khi sửa.\n` +
-        OUTPUT_RULES,
-    },
-    {
-      role: 'user',
-      content: `Project hiện tại:\n${JSON.stringify(files)}\n\nCác lỗi cần sửa:\n${issueText}`,
-    },
-  ];
+    const issueText = issues.map((i, idx) => `${idx + 1}. [${i.level}] ${i.message} (${i.file})`).join('\n');
+    return [
+        {
+            role: 'system',
+            content:
+                `Bạn là Review Agent. Trang web hiện tại có lỗi cần SỬA. Ngôn ngữ: ${language}.\n` +
+                `Sửa ĐÚNG các lỗi được liệt kê, GIỮ NGUYÊN nội dung/thiết kế hợp lệ còn lại.\n` +
+                `Trả về TOÀN BỘ danh sách file sau khi sửa.\n` +
+                OUTPUT_RULES,
+        },
+        {
+            role: 'user',
+            content: `Project hiện tại:\n${JSON.stringify(files)}\n\nCác lỗi cần sửa:\n${issueText}`,
+        },
+    ];
 }
 
 export const mockProjectRaw = JSON.stringify({
-  summary: 'Landing page mẫu (mock) — quán cà phê',
-  entry: '/index.html',
-  files: [
-    {
-      path: '/index.html',
-      content: `<!doctype html>
+    summary: 'Landing page mẫu (mock) — quán cà phê',
+    entry: '/index.html',
+    files: [
+        {
+            path: '/index.html',
+            content: `<!doctype html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
@@ -139,6 +139,6 @@ export const mockProjectRaw = JSON.stringify({
   <footer>© 2026 Acme Coffee — demo skeleton</footer>
 </body>
 </html>`,
-    },
-  ],
+        },
+    ],
 });
