@@ -1,3 +1,10 @@
+/**
+ * TEST REVIEW — kiểm tra bộ validate HTML của Review Agent (KHÔNG gọi model, KHÔNG tốn tiền).
+ * Chạy:  cd server && npm run test:review
+ *
+ * Khẳng định: HTML hợp lệ -> ok; các HTML lỗi -> bắt đúng loại error.
+ * Cũng soát luôn project mẫu MOCK để chắc nó "sạch".
+ */
 import { validateHtml, reviewProject } from '../src/review.js';
 import { mockProjectRaw } from '../src/prompts/codegen.js';
 import { parseProject } from '../src/parser.js';

@@ -1,3 +1,10 @@
+/**
+ * TEST BRAND (Bước 7) — kiểm tra ưu tiên component theo brand khi truy xuất.
+ * Chạy:  cd server && npm run test:brand
+ * Yêu cầu: đã `npm run build:rag` SAU khi thêm component brand.
+ *
+ * KHÔNG gọi model, KHÔNG tốn tiền.
+ */
 import 'dotenv/config';
 import { retrieveComponents } from '../src/rag/retrieve.js';
 

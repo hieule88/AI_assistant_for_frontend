@@ -1,8 +1,19 @@
+/**
+ * BRANDS (Bước 7 — cá nhân hóa) — kho thương hiệu: tên, màu, font, logo.
+ *
+ * Lưu đơn giản ra file JSON (server/brands.json) để sống qua restart.
+ * Seed sẵn 1 brand mẫu "acme-coffee" để demo. Logo có thể là data URI (upload),
+ * URL ảnh, hoặc text/emoji.
+ *
+ * Brand được pipeline dùng để: (1) nhồi nhận diện vào prompt Code Agent,
+ * (2) ưu tiên component gắn brand khi truy xuất RAG (xem rag/retrieve.js).
+ */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-const FILE = fileURLToPath(new URL('../brands.json', import.meta.url));
+const FILE = fileURLToPath(new URL('../brands.json', import.meta.url)); // server/brands.json
 
+// Brand mẫu — id 'acme-coffee' khớp với các component gắn brand trong rag/components.js.
 const SEED = [
   {
     id: 'acme-coffee',
@@ -43,12 +54,13 @@ export function getBrand(id) {
   return load().find((b) => b.id === id) || null;
 }
 
+/** Sinh id duy nhất từ tên (slug), thêm hậu tố nếu trùng. */
 function makeId(name) {
   const base =
     String(name)
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
+      .replace(/[̀-ͯ]/g, '') // bỏ dấu tiếng Việt
       .replace(/đ/g, 'd')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
@@ -60,6 +72,10 @@ function makeId(name) {
   return `${base}-${i}`;
 }
 
+/**
+ * Tạo brand mới. Trả về brand đã chuẩn hóa (kèm id).
+ * Ném Error nếu thiếu tên.
+ */
 export function createBrand({ name, colors, font, logo } = {}) {
   if (!name || !String(name).trim()) throw new Error('Thiếu "name" cho brand');
   const brand = {

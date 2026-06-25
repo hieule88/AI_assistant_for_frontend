@@ -14,6 +14,7 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, mock: process.env.MOCK_MODE === '1', model: process.env.QWEN_MODEL || 'mock' });
 });
 
+// POST /api/generate  -> sinh project mới từ mô tả
 app.post('/api/generate', async (req, res) => {
   const { description, language, brandId } = req.body || {};
   if (!description || typeof description !== 'string') {
@@ -27,6 +28,7 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
+// POST /api/edit  -> chỉnh sửa project hiện có
 app.post('/api/edit', async (req, res) => {
   const { files, instruction, language } = req.body || {};
   if (!Array.isArray(files) || !instruction) {
@@ -40,10 +42,12 @@ app.post('/api/edit', async (req, res) => {
   }
 });
 
+// GET /api/brands  -> danh sách brand
 app.get('/api/brands', (req, res) => {
   res.json({ brands: listBrands() });
 });
 
+// POST /api/brands  -> tạo brand mới (logo gửi dạng data URI)
 app.post('/api/brands', (req, res) => {
   try {
     const { name, colors, font, logo } = req.body || {};
@@ -53,10 +57,12 @@ app.post('/api/brands', (req, res) => {
   }
 });
 
+// GET /api/components  -> thống kê kho + component user đã thêm
 app.get('/api/components', (req, res) => {
   res.json(listAllComponents());
 });
 
+// POST /api/components -> end-user thêm component lúc chạy (embed + nạp ngay vào store)
 app.post('/api/components', async (req, res) => {
   try {
     const { name, description, tags, brand, code } = req.body || {};
@@ -67,6 +73,7 @@ app.post('/api/components', async (req, res) => {
   }
 });
 
+// PUT /api/components/:id -> sửa component user (re-embed + upsert)
 app.put('/api/components/:id', async (req, res) => {
   try {
     const { name, description, tags, brand, code } = req.body || {};
@@ -77,6 +84,7 @@ app.put('/api/components/:id', async (req, res) => {
   }
 });
 
+// DELETE /api/components/:id -> xóa component user (khỏi file + store)
 app.delete('/api/components/:id', async (req, res) => {
   try {
     await removeComponent(req.params.id);
