@@ -4,9 +4,6 @@ Trợ lý sinh giao diện web từ mô tả bằng tiếng Việt/Anh: nhập m
 trình duyệt → chỉnh sửa qua chat. Điểm chính là **Code RAG** (truy xuất component để giữ giao diện nhất quán)
 kết hợp hai tác tử **Coder / Critic** tự phản biện và sửa lại.
 
-## Yêu cầu
-- Node >= 18
-
 ## Cài đặt
 ```bash
 git clone https://github.com/hieule88/AI_assistant_for_frontend
@@ -37,10 +34,6 @@ cd web
 npm run dev           # http://localhost:5173
 ```
 Mở trình duyệt tại http://localhost:5173.
-
-## Cấu trúc
-- `server/` — API (Express), pipeline tác tử, Code RAG (embedding + vector store), lớp gọi model.
-- `web/` — giao diện React: chat, preview bằng iframe, editor code.
 
 ## So sánh nhiều model (tùy chọn)
 Thêm API key vào `server/.env` rồi:
