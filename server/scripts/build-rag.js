@@ -1,3 +1,12 @@
+/**
+ * BUILD RAG — nạp kho component vào vector store (chạy 1 lần, hoặc khi đổi kho).
+ * Chạy:  cd server && npm run build:rag
+ *
+ * Quy trình: đọc components.js -> embed local (miễn phí) -> addAll vào store
+ * (memory: ghi rag-index.json | chroma: upsert collection).
+ *
+ * KHÔNG gọi model sinh code, KHÔNG tốn tiền.
+ */
 import 'dotenv/config';
 import { components, buildEmbedText } from '../src/rag/components.js';
 import { embedTexts, MODEL } from '../src/rag/embed.js';
@@ -5,7 +14,7 @@ import { getStore, storeKind } from '../src/rag/store.js';
 import { listUserComponents } from '../src/rag/userComponents.js';
 
 async function main() {
-
+  // Gộp kho tĩnh + component do end-user thêm (để không bị mất khi build lại).
   const userComps = listUserComponents();
   const all = [...components, ...userComps];
   console.log(
